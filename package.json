@@ -7,14 +7,14 @@
   "scripts": {
     "postinstall": "node scripts/fix-node-pty.cjs",
     "predev": "node scripts/start.mjs",
-    "dev": "ROAM_APPS_PORT=9506 node server/main/index.js --port=9505 & node server/apps/index.js --port=9506 & vite --config gui/vite.config.js gui",
+    "dev": "ROAM_APPS_PORT=9508 node server/main/index.js --port=9507 & node server/apps/index.js --port=9508 & vite --config gui/vite.config.js gui",
     "prebuild": "node scripts/start.mjs",
     "build": "vite build --config gui/vite.config.js gui",
     "prestart": "node scripts/start.mjs",
     "start": "node scripts/run.mjs",
-    "start:main": "ROAM_APPS_PORT=9506 node server/main/index.js --port=9505",
-    "start:apps": "node server/apps/index.js --port=9506",
-    "start:relay": "ROAM_MAIN_PORT=9505 node server/relay/index.js",
+    "start:main": "ROAM_APPS_PORT=9508 node server/main/index.js --port=9507",
+    "start:apps": "node server/apps/index.js --port=9508",
+    "start:relay": "ROAM_MAIN_PORT=9507 node server/relay/index.js",
     "lang:apply": "node scripts/start.mjs --force",
     "lang:reset": "rm -rf .aios"
   },

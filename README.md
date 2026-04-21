@@ -100,7 +100,7 @@ npm run build        # 构建前端到 gui/dist
 npm start            # 起 main + apps 两个进程
 ```
 
-打开 <http://localhost:9505>,右上角齿轮配模型,开始用。
+打开 <http://localhost:9507>,右上角齿轮配模型,开始用。
 
 - `npm run start:main` — 只起内核进程
 - `npm run start:apps` — 只起应用进程
@@ -114,7 +114,7 @@ v4 默认只绑 `127.0.0.1`。想远程用,挑一个隧道:
 
 ### ngrok(最省事)
 ```bash
-ngrok http 9505
+ngrok http 9507
 ```
 
 ### Cloudflare Tunnel(长期域名)
@@ -122,13 +122,13 @@ ngrok http 9505
 brew install cloudflared
 cloudflared tunnel create roam
 cloudflared tunnel route dns roam roam.你的域.com
-cloudflared tunnel --url http://localhost:9505 run roam
+cloudflared tunnel --url http://localhost:9507 run roam
 ```
 配合 Cloudflare Zero Trust Access 锁定访问。
 
 ### Tailscale Serve
 ```bash
-tailscale serve --bg 9505
+tailscale serve --bg 9507
 ```
 只有 tailnet 成员可访问。
 
@@ -138,7 +138,7 @@ tailscale serve --bg 9505
 
 两端都在本仓库里:
 - **Worker 端** (公网): [`roam-relay-worker/`](./roam-relay-worker) — `wrangler deploy` 自己的 CF 账号
-- **本地端** (家里机器): [`server/relay/`](./server/relay) — 第三个进程, 拨 Worker 挂住, 把请求转发回 localhost:9505
+- **本地端** (家里机器): [`server/relay/`](./server/relay) — 第三个进程, 拨 Worker 挂住, 把请求转发回 localhost:9507
 
 启动时只要设置三个环境变量,`npm start` 会自动多起一个 `relay` 子进程:
 
@@ -161,13 +161,13 @@ AIOS 是双进程内核,Roam 继承了这套:
 
 ```
 ┌─────────────────────────────────────┐
-│ main 进程 (9505) — 稳定内核         │
+│ main 进程 (9507) — 稳定内核         │
 │ · HTTP + WebSocket                  │
 │ · Agent + LLM 流式                  │
 │ · 系统服务: pty / 文件 / 任务管理    │
 │ · 对话连接不中断                    │
 ├─────────────────────────────────────┤
-│ apps 进程 (9506) — 应用运行时       │
+│ apps 进程 (9508) — 应用运行时       │
 │ · 每个应用独立模块 + 独立 DB        │
 │ · 可独立热重启,不影响 main          │
 │ · 为"agent 现场生成新应用"预留      │

@@ -4,7 +4,7 @@ import { Forwarder } from "./forwarder.js";
 const wsUrl = process.env.ROAM_RELAY_WS;
 const token = process.env.ROAM_RELAY_TOKEN;
 const deviceId = process.env.ROAM_DEVICE_ID;
-const mainPort = Number(process.env.ROAM_MAIN_PORT || 9505);
+const mainPort = Number(process.env.ROAM_MAIN_PORT || 9507);
 const localHost = process.env.ROAM_MAIN_HOST || "127.0.0.1";
 
 if (!wsUrl || !token || !deviceId) {

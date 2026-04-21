@@ -13,7 +13,7 @@
 
 ## 运行环境（重要）
 
-你当前的工作目录**就是运行态 workspace**。没有"源码仓库/运行副本"两份代码，也不存在什么"回到主仓库"这种事——你改的文件就是 `9505` 和 `9506` 两个服务正在运行的那份，改完之后触发 reload 就立刻生效。
+你当前的工作目录**就是运行态 workspace**。没有"源码仓库/运行副本"两份代码，也不存在什么"回到主仓库"这种事——你改的文件就是 `9507` 和 `9508` 两个服务正在运行的那份，改完之后触发 reload 就立刻生效。
 
 目录长这样：
 
@@ -99,12 +99,12 @@
 
 **所有后端代码改动必须通过 reload 请求触发重启，否则新代码不生效。**
 
-9505（主服务）和 9506（apps 服务）这两个 Node 进程在启动时就把模块树烘焙在内存里了。你改了磁盘上的 `.js` 文件，**进程内存里的旧代码不会自动更新**——Node 的 ESM 模块缓存不会因为文件变化重载。不重启 = 白改。
+9507（主服务）和 9508（apps 服务）这两个 Node 进程在启动时就把模块树烘焙在内存里了。你改了磁盘上的 `.js` 文件，**进程内存里的旧代码不会自动更新**——Node 的 ESM 模块缓存不会因为文件变化重载。不重启 = 白改。
 
 **改完立刻调用：**
 
 ```bash
-curl -X POST http://localhost:9505/api/system/reload/request \
+curl -X POST http://localhost:9507/api/system/reload/request \
   -H "Content-Type: application/json" \
   -d '{"build": false, "restartApps": true, "restartServer": false, "message": "新增 todo 应用"}'
 ```
@@ -122,7 +122,7 @@ curl -X POST http://localhost:9505/api/system/reload/request \
 **只做预检、不切换**，用：
 
 ```bash
-curl -X POST http://localhost:9505/api/system/reload/test \
+curl -X POST http://localhost:9507/api/system/reload/test \
   -H "Content-Type: application/json" \
   -d '{"restartApps": true}'
 ```

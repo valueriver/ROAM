@@ -2,7 +2,7 @@ import { parseJsonObject } from "../../shared/ai/json.js";
 const requestTask = async (body = {}) => {
   let resp;
   try {
-    resp = await fetch(`http://localhost:${process.env.ROAM_MAIN_PORT || 9505}/api/task/create/agent`, {
+    resp = await fetch(`http://localhost:${process.env.ROAM_MAIN_PORT || 9507}/api/task/create/agent`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body)

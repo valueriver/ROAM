@@ -115,7 +115,7 @@ The relay:
 
 - dials `wss://relay.<domain>/ws/device?device_id=<id>` with `Authorization: Bearer <token>`
 - holds the connection open with exponential-backoff auto-reconnect
-- translates `proxy_request` → `fetch('http://127.0.0.1:9505' + path)` → `proxy_response`
+- translates `proxy_request` → `fetch('http://127.0.0.1:9507' + path)` → `proxy_response`
 - tunnels `ws_open` / `ws_message` / `ws_close` frames to/from local WebSockets
 
 Unset the three env vars to turn relay off — `npm start` reverts to just

@@ -49,15 +49,15 @@ const shutdown = (code = 0) => {
 process.on("SIGINT", () => shutdown(0));
 process.on("SIGTERM", () => shutdown(0));
 
-start("main", [join(ROOT, "server/main/index.js"), "--port=9505"], {
-  ROAM_APPS_PORT: "9506"
+start("main", [join(ROOT, "server/main/index.js"), "--port=9507"], {
+  ROAM_APPS_PORT: "9508"
 });
-start("apps", [join(ROOT, "server/apps/index.js"), "--port=9506"], {
-  ROAM_MAIN_PORT: "9505"
+start("apps", [join(ROOT, "server/apps/index.js"), "--port=9508"], {
+  ROAM_MAIN_PORT: "9507"
 });
 
 if (process.env.ROAM_RELAY_WS && process.env.ROAM_RELAY_TOKEN && process.env.ROAM_DEVICE_ID) {
   start("relay", [join(ROOT, "server/relay/index.js")], {
-    ROAM_MAIN_PORT: "9505"
+    ROAM_MAIN_PORT: "9507"
   });
 }

@@ -7,7 +7,7 @@ const portArg = process.argv.find((arg) => arg.startsWith("--port="));
 if (portArg && !/^\-\-port=\d+$/.test(portArg)) {
   throw new Error("Invalid port argument");
 }
-const PORT = portArg ? Number(portArg.slice("--port=".length)) : 9505;
+const PORT = portArg ? Number(portArg.slice("--port=".length)) : 9507;
 
 initSystemDirs();
 initDatabase();
