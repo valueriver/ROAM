@@ -68,22 +68,9 @@ const createAgentTask = async ({
   });
   broadcast({ type: "tasks_changed" });
   const send = (msg) => {
-    if (msg.type === "tool_call") {
-      if (msg.toolCall) {
-        saveTaskMessage(conversationId, {
-          role: "assistant",
-          content: null,
-          tool_calls: [msg.toolCall]
-        }, null);
-      }
-      return;
-    }
-    if (msg.type === "tool_result") {
+    if (msg.type === "assistant_tool_calls" || msg.type === "tool_result" || msg.type === "done") {
       if (msg.message) saveTaskMessage(conversationId, msg.message, null);
       return;
-    }
-    if (msg.type === "assistant") {
-      if (msg.message) saveTaskMessage(conversationId, msg.message, null);
     }
   };
   const abortController = new AbortController();
@@ -103,7 +90,6 @@ const createAgentTask = async ({
       enableToolLoopLimit,
       toolMaxRounds
     });
-    saveTaskMessage(conversationId, { role: "assistant", content: response }, null);
     updateTaskDone({ taskId, response });
     broadcast({ type: "tasks_changed" });
     return { id: taskId, conversationId, response };

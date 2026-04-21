@@ -99,15 +99,20 @@ wandesk admin project for inspiration if you want to build one.)
 
 ## How your Roam client connects
 
-Roam v4 ships a relay dialer at [`server/relay/`](../server/relay). Point it
-at your Worker with three env vars:
+Roam v4 ships a relay dialer at [`server/relay/`](../server/relay). Edit
+[`server/relay/config.js`](../server/relay/config.js) (git-ignored) with
+three values:
 
-```bash
-export ROAM_RELAY_WS="wss://relay.<your-domain>/ws/device"
-export ROAM_RELAY_TOKEN="your-secret-token"        # plain; matched against D1 via SHA-256
-export ROAM_DEVICE_ID="dev-1"                       # matches the row you inserted in D1
-npm start
+```js
+export default {
+  wsUrl: "wss://relay.<your-domain>/ws/device",
+  token: "your-secret-token",          // plain; matched against D1 via SHA-256
+  deviceId: "dev-1",                    // matches the row you inserted in D1
+};
 ```
+
+Then `npm start`. (Env vars `ROAM_RELAY_WS` / `ROAM_RELAY_TOKEN` /
+`ROAM_DEVICE_ID` also work if you prefer not to touch files.)
 
 `npm start` auto-spawns a `[relay]` process alongside `[main]` and `[apps]`
 whenever all three env vars are set. Each process's logs get its own prefix.

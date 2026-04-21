@@ -140,16 +140,20 @@ tailscale serve --bg 9507
 - **Worker 端** (公网): [`roam-relay-worker/`](./roam-relay-worker) — `wrangler deploy` 自己的 CF 账号
 - **本地端** (家里机器): [`server/relay/`](./server/relay) — 第三个进程, 拨 Worker 挂住, 把请求转发回 localhost:9507
 
-启动时只要设置三个环境变量,`npm start` 会自动多起一个 `relay` 子进程:
+编辑 [`server/relay/config.js`](./server/relay/config.js) 填三项即可(此文件已 gitignore,本地独占):
 
-```bash
-export ROAM_RELAY_WS="wss://relay.你的域名/ws/device"
-export ROAM_RELAY_TOKEN="你的设备 token"
-export ROAM_DEVICE_ID="你在 D1 里注册的 device_id"
-npm start   # 自动 spawn main + apps + relay 三个进程
+```js
+export default {
+  wsUrl: "wss://relay.你的域名/ws/device",
+  token: "你的设备 token",
+  deviceId: "你在 D1 里注册的 device_id",
+};
 ```
 
-不设这三个环境变量就没有 relay 进程,和直接 ngrok / Tunnel 用法一致。
+保存后 `npm start` 自动多起一个 `relay` 子进程 (main + apps + relay 三进程)。
+字段留空就不启动 relay,和直接 ngrok / Tunnel 用法一致。
+
+(也支持 `ROAM_RELAY_WS` / `ROAM_RELAY_TOKEN` / `ROAM_DEVICE_ID` 环境变量,方便 CI / 容器部署。)
 
 (这是 v2 架构的简化重生版 —— 只是它不再是默认,也不强制。想要就装。)
 

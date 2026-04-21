@@ -1,14 +1,24 @@
 import { RelayClient } from "./client.js";
 import { Forwarder } from "./forwarder.js";
 
-const wsUrl = process.env.ROAM_RELAY_WS;
-const token = process.env.ROAM_RELAY_TOKEN;
-const deviceId = process.env.ROAM_DEVICE_ID;
-const mainPort = Number(process.env.ROAM_MAIN_PORT || 9507);
-const localHost = process.env.ROAM_MAIN_HOST || "127.0.0.1";
+let fileConfig = {};
+try {
+  const mod = await import("./config.js");
+  fileConfig = mod.default || mod.config || {};
+} catch {
+  // 没有 config.js 就只看环境变量
+}
+
+const wsUrl    = fileConfig.wsUrl    || process.env.ROAM_RELAY_WS    || "";
+const token    = fileConfig.token    || process.env.ROAM_RELAY_TOKEN || "";
+const deviceId = fileConfig.deviceId || process.env.ROAM_DEVICE_ID   || "";
+const mainPort = Number(fileConfig.mainPort || process.env.ROAM_MAIN_PORT || 9507);
+const localHost = fileConfig.mainHost || process.env.ROAM_MAIN_HOST || "127.0.0.1";
 
 if (!wsUrl || !token || !deviceId) {
-  console.error("[relay] required env missing: ROAM_RELAY_WS / ROAM_RELAY_TOKEN / ROAM_DEVICE_ID");
+  console.error("[relay] config incomplete.");
+  console.error("  Fill in server/relay/config.js (wsUrl / token / deviceId)");
+  console.error("  or set ROAM_RELAY_WS / ROAM_RELAY_TOKEN / ROAM_DEVICE_ID env vars.");
   process.exit(1);
 }
 

@@ -46,19 +46,38 @@ const runInstantTask = async ({
   if (tool_choice !== void 0) payload.tool_choice = tool_choice;
   if (parallel_tool_calls !== void 0) payload.parallel_tool_calls = parallel_tool_calls;
   const assistant = await callLlmRegular(provider, apiUrl, apiKey, payload, signal);
-  const content = String(assistant?.content || "").trim();
+  const assistantMessage = {
+    role: "assistant",
+    content: assistant?.content ?? ""
+  };
   if (Array.isArray(assistant?.tool_calls) && assistant.tool_calls.length > 0) {
-    return JSON.stringify({
-      content,
-      tool_calls: assistant.tool_calls
-    });
+    assistantMessage.tool_calls = assistant.tool_calls;
+  }
+  if (assistant?.reasoning_content !== undefined) {
+    assistantMessage.reasoning_content = assistant.reasoning_content;
+  }
+  const content = String(assistantMessage.content || "").trim();
+  if (Array.isArray(assistantMessage.tool_calls) && assistantMessage.tool_calls.length > 0) {
+    return {
+      assistantMessage,
+      response: JSON.stringify({
+        content,
+        tool_calls: assistantMessage.tool_calls
+      })
+    };
   }
   if (schema) {
     const parsed = parseJsonObject(content);
     validateBySchema(parsed, schema);
-    return JSON.stringify(parsed);
+    return {
+      assistantMessage,
+      response: JSON.stringify(parsed)
+    };
   }
-  return content;
+  return {
+    assistantMessage,
+    response: content
+  };
 };
 const createInstantTask = async ({
   app,
@@ -85,7 +104,7 @@ const createInstantTask = async ({
   const abortController = new AbortController();
   registerTaskExecution(taskId, abortController);
   try {
-    const response = await runInstantTask({
+    const { assistantMessage, response } = await runInstantTask({
       prompt,
       schema,
       provider,
@@ -98,7 +117,7 @@ const createInstantTask = async ({
       parallel_tool_calls,
       signal: abortController.signal
     });
-    saveTaskMessage(conversationId, { role: "assistant", content: response }, null);
+    saveTaskMessage(conversationId, assistantMessage, null);
     updateTaskDone({ taskId, response });
     broadcast({ type: "tasks_changed" });
     return { id: taskId, conversationId, response };

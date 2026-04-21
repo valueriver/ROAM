@@ -56,7 +56,18 @@ start("apps", [join(ROOT, "server/apps/index.js"), "--port=9508"], {
   ROAM_MAIN_PORT: "9507"
 });
 
-if (process.env.ROAM_RELAY_WS && process.env.ROAM_RELAY_TOKEN && process.env.ROAM_DEVICE_ID) {
+let relayConfig = {};
+try {
+  const mod = await import(join(ROOT, "server/relay/config.js"));
+  relayConfig = mod.default || mod.config || {};
+} catch {
+  // no config.js — 看 env
+}
+const relayReady =
+  (relayConfig.wsUrl && relayConfig.token && relayConfig.deviceId) ||
+  (process.env.ROAM_RELAY_WS && process.env.ROAM_RELAY_TOKEN && process.env.ROAM_DEVICE_ID);
+
+if (relayReady) {
   start("relay", [join(ROOT, "server/relay/index.js")], {
     ROAM_MAIN_PORT: "9507"
   });

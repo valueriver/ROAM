@@ -4,3 +4,4 @@ gui/dist/
 .DS_Store
 *.log
 /database/
+server/relay/config.js
