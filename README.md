@@ -132,6 +132,12 @@ tailscale serve --bg 9506
 ```
 只有 tailnet 成员可访问。
 
+### 自建 Cloudflare Worker 中继 (进阶)
+
+如果你有自己的域名 + Cloudflare 账号,仓库里 [`roam-relay-worker/`](./roam-relay-worker) 提供了一个可部署的 Worker,给每台设备一个固定的 `https://<slug>.roam.<your-domain>/`,家里电脑只需要 *outbound* WebSocket,不用对外开端口。详见 [roam-relay-worker/README.md](./roam-relay-worker/README.md)。
+
+(这是 v2 架构的简化重生版 —— 只是它不再是默认,也不强制。想要就装。)
+
 ---
 
 ## 架构

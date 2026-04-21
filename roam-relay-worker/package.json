@@ -1,0 +1,15 @@
+{
+  "name": "roam-relay-worker",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "db:init": "wrangler d1 execute roam_relay --file=migrations/0001_init.sql",
+    "db:init:remote": "wrangler d1 execute roam_relay --remote --file=migrations/0001_init.sql"
+  },
+  "devDependencies": {
+    "wrangler": "^4.77.0"
+  }
+}

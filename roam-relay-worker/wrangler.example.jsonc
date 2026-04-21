@@ -1,0 +1,46 @@
+{
+  "name": "roam-relay-worker",
+  "account_id": "YOUR_CLOUDFLARE_ACCOUNT_ID",
+  "compatibility_date": "2026-04-21",
+  "main": "src/index.js",
+  "observability": { "enabled": true },
+
+  // Where Cloudflare should route traffic to this Worker.
+  // Replace the domains below with yours. relay.<your-domain> for device
+  // WebSocket connection, *.roam.<your-domain>/* for per-device public URLs.
+  "routes": [
+    { "pattern": "relay.example.com", "custom_domain": true },
+    { "pattern": "*.roam.example.com/*", "zone_name": "example.com" }
+  ],
+
+  // Must match the hostnames above so the Worker can build correct URLs.
+  "vars": {
+    "DEVICE_HOST": "relay.example.com",
+    "PUBLIC_ROOT_HOST": "roam.example.com",
+    "HTTP_TIMEOUT_MS": "30000"
+  },
+
+  // D1 database for device registrations. Create with:
+  //   wrangler d1 create roam_relay
+  // then paste the database_id it prints here.
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "roam_relay",
+      "database_id": "YOUR_D1_DATABASE_ID"
+    }
+  ],
+
+  "durable_objects": {
+    "bindings": [
+      { "name": "DEVICE_RELAY", "class_name": "DeviceRelay" }
+    ]
+  },
+
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": ["DeviceRelay"]
+    }
+  ]
+}
