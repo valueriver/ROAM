@@ -1,7 +1,19 @@
 node_modules/
-gui/dist/
-.aios/
 .DS_Store
 *.log
+
+# build artifacts
+gui/dist/
+worker/public/
+worker/dist/
+.wrangler/
+.aios/
+
+# 私密配置 — 复制 worker/wrangler.example.jsonc 到 worker/wrangler.jsonc 后填值
+worker/wrangler.jsonc
+
+# 桌面端本地数据库(和 .roam/ 一起在用户 home 下)
 /database/
+
+# relay legacy
 server/relay/config.js
